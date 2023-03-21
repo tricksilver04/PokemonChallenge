@@ -5,6 +5,10 @@ import org.junit.Assert
 import org.junit.Test
 
 class DetailsMapperTest {
+    /**
+     * Testing the DetailsMapper class with
+     * premade inputs and expected outputs
+     * */
     @Test
     fun detailsMapperTest () {
         val details = DetailsMapper.mapDetails(response = DetailsResponse(

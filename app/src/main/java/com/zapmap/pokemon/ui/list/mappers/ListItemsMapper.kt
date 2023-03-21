@@ -12,6 +12,10 @@ object ListItemsMapper {
         response: ListResponse
     ): List<ItemState> {
         val items = mutableListOf<ItemState>()
+        /**
+         * map name and id extracted
+         * from the url
+         * */
         items.addAll(
             response.results.map {
                 val url = URL(it.url)
@@ -23,6 +27,7 @@ object ListItemsMapper {
                 )
             }
         )
+        // add LoadMoreState to trigger the next scroll loading of items
         items.add(LoadMoreState)
         return items
     }

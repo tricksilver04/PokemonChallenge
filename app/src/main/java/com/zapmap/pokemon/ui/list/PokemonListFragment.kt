@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -45,11 +46,13 @@ class PokemonListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // setup handling of UI events and add lifecyclescope to avoid memory leaks
         viewModel.uiState
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
             .onEach(::takeSingleEvent)
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
+        // prevent this fragment from being recreated when back button is tapped
         if (!hasInitializedRootView) {
             hasInitializedRootView = true
 
@@ -60,6 +63,9 @@ class PokemonListFragment : Fragment() {
         }
     }
 
+    /**
+     * handle the UI Events and update UI
+     * */
     private fun takeSingleEvent (uiState: PokemonListViewModel.UiState) {
         if (uiState.isLoading) {
             binding?.pbFetchingPokemons?.visibility = View.VISIBLE
@@ -69,6 +75,7 @@ class PokemonListFragment : Fragment() {
                 viewModel.intent.fetchPokemons()
             }
         } else if (uiState.userMessage!=null) {
+            Toast.makeText(requireContext(),"Error: ${uiState.userMessage}",Toast.LENGTH_SHORT).show()
             if (pokemonAdapter.items.isEmpty()){
                 binding?.pbFetchingPokemons?.visibility = View.GONE
                 binding?.rcvPokemonList?.visibility = View.GONE
@@ -83,21 +90,29 @@ class PokemonListFragment : Fragment() {
             binding?.pbFetchingPokemons?.visibility = View.VISIBLE
             binding?.rcvPokemonList?.visibility = View.VISIBLE
             binding?.flEmptyList?.visibility = View.GONE
-            addItems(uiState.items)
+            updateItems(uiState.items)
         }
     }
 
+    /**
+     * Setup PokemonAdapter with the callbacks
+     * */
     private val pokemonAdapter = PokemonAdapter(
         retryCallback = {
             viewModel.intent.fetchPokemons(nextOffset)
         },
         itemClickCallback = { id ->
+            // open the Pokemon details screen
             findNavController().navigate(
                 PokemonListFragmentDirections.mainToPokemonDetails(pokemonId = id)
             )
         }
     )
 
+    /**
+     *  Initialize recyclerview scrolllistener and setup conditions when to add new items
+     *  to the list
+     * */
     private fun initPokemonListScrollListener(recyclerView: RecyclerView) {
         with(recyclerView) {
             adapter = pokemonAdapter
@@ -110,6 +125,7 @@ class PokemonListFragment : Fragment() {
                     val lastVisibleItemPosition = (recyclerView.layoutManager as LinearLayoutManager)
                         .findLastCompletelyVisibleItemPosition()
                     if (lastVisibleItemPosition != RecyclerView.NO_POSITION && dy > 0) {
+                        // call fetchPokemons only when there exist a visible LoadMoreState at the bottom of the list
                         (pokemonAdapter.items[lastVisibleItemPosition] as? ItemState.LoadMoreState)?.let {
                             viewModel.intent.fetchPokemons(nextOffset)
                             Timber.e("nextoffset ${nextOffset}")
@@ -122,8 +138,9 @@ class PokemonListFragment : Fragment() {
 
     var nextOffset = 0
 
-    fun addItems(items: List<ItemState>) {
+    fun updateItems(items: List<ItemState>) {
         pokemonAdapter.processItems(items)
+        // increment nextOffset variable after the recyclerview list is updated
         nextOffset += PokemonListViewModel.LIMIT
     }
 }

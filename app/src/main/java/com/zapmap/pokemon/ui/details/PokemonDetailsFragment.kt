@@ -38,11 +38,13 @@ class PokemonDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // handle back button
         binding?.apply {
             toolbar.setNavigationOnClickListener {
                 findNavController().popBackStack()
             }
         }
+        // setup handling of UI events and add lifecyclescope to avoid memory leaks
         viewModel.uiState
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
             .onEach(::takeSingleEvent)
@@ -51,6 +53,9 @@ class PokemonDetailsFragment : Fragment() {
         viewModel.intent.fetchDetails(arguments.pokemonId)
     }
 
+    /**
+     * handle the UI Events and update UI
+     * */
     private fun takeSingleEvent (uiState: PokemonDetailsViewModel.UiState) {
         binding?.pbPokemonImage?.visibility = if (uiState.isLoading) View.VISIBLE else View.GONE
         uiState.details?.let {

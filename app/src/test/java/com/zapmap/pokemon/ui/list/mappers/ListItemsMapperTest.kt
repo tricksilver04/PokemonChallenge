@@ -9,6 +9,10 @@ import org.junit.Test
 
 class ListItemsMapperTest {
 
+    /**
+     * Testing the ItemsMapper class with
+     * premade inputs and expected outputs
+     * */
     @Test
     fun listItemsMapperTest(){
         val listItems = ListItemsMapper.mapListItems(response = ListResponse(

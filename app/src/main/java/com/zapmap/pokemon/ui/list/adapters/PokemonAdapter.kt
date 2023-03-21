@@ -43,6 +43,7 @@ class PokemonAdapter(
         )
     }
 
+    // add LoadMoreState at the end of the items list to trigger a loading of items when visible
     private fun setLoadMoreState() {
         putItems(items.filter { it is PokemonItemState }  + (LoadMoreState))
     }
@@ -78,6 +79,7 @@ class PokemonAdapter(
         }
     }
 
+    // add a RetryState to the end of the items list to show the Retry button when error is encountered
     fun setRetryState() {
         putItems(items.filter { it is PokemonItemState }  + (RetryState))
     }
@@ -110,6 +112,10 @@ class PokemonAdapter(
         }
     }
 
+    /**
+     * Add the new items at the end
+     * of the current items list
+     * */
     fun processItems(newItems: List<ItemState>){
         val combinedItems = items.filter { it is PokemonItemState } + (newItems)
         putItems(combinedItems)

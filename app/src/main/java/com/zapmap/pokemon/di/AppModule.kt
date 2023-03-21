@@ -18,6 +18,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
+/**
+ * To provide instances being injected in the classes
+ * to prevent too much code coupling
+ * */
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
@@ -25,7 +29,9 @@ class AppModule {
     @Provides
     @Singleton
     fun providesPokemonListRepository(apiService: ApiService): PokemonRepository {
-        return DefaultPokemonRepository(networkDataSource = NetworkDataSourceImpl(apiService = apiService))
+        return DefaultPokemonRepository(
+            networkDataSource = NetworkDataSourceImpl(apiService = apiService)
+        )
     }
 
     @Provides
