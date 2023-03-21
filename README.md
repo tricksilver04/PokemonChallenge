@@ -4,7 +4,7 @@
 
 
 ### Architecture Pattern
-  - The architecture used is MVI
+  - The architecture used is MVI with Repository Pattern
   
 ### Navigation
   - Jetpack Navigation
