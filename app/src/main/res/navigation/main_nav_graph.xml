@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/fragmentMain">
+
+    <fragment
+        android:id="@+id/fragmentMain"
+        android:name="com.zapmap.pokemon.ui.list.PokemonListFragment"
+        android:label="main"
+        tools:layout="@layout/fragment_pokemon_list">
+
+        <action
+            android:id="@+id/mainToPokemonDetails"
+            app:destination="@id/fragmentPokemonDetails" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentPokemonDetails"
+        android:name="com.zapmap.pokemon.ui.details.PokemonDetailsFragment"
+        android:label="pokemonDetails"
+        tools:layout="@layout/fragment_pokemon_item_details">
+
+        <argument
+            android:name="pokemonId"
+            android:defaultValue="-1"
+            app:argType="integer" />
+
+    </fragment>
+
+</navigation>

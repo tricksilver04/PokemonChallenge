@@ -1,12 +1,12 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     dependencies {
-        classpath(Dependencies.GradlePlugin.navigationSafeArgsGradle)
-        classpath(Dependencies.GradlePlugin.hiltAndroid)
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.4.2")
+        classpath("com.google.dagger:hilt-android-gradle-plugin:2.42")
     }
 }
 plugins {
-    id(Dependencies.GradlePlugin.application).version(Versions.application).apply(false)
-    id(Dependencies.GradlePlugin.androidLibrary).version(Versions.androidLibrary).apply(false)
-    id(Dependencies.GradlePlugin.kotlinAndroid).version(Versions.kotlinAndroid).apply(false)
+    id("com.android.application").version("7.3.1").apply(false)
+    id("com.android.library").version("7.3.1").apply(false)
+    id("org.jetbrains.kotlin.android").version("1.7.20").apply(false)
 }

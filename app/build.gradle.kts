@@ -1,26 +1,24 @@
-import extensions.androidTestImplementations
-import extensions.implementations
-import extensions.kapts
-import extensions.testImplementations
-
 plugins {
-    id(Dependencies.AppPlugins.application)
-    id(Dependencies.AppPlugins.jetbrainsKotlinAndroid)
-    id(Dependencies.AppPlugins.kotlinKapt)
-    id(Dependencies.AppPlugins.hiltAndroid)
-    id(Dependencies.AppPlugins.navigationSafeargsKotlin)
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("dagger.hilt.android.plugin")
+    id("kotlin-kapt")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
+
 android {
-    namespace = Configurations.namespace
-    compileSdk = Configurations.compileSdk
+    namespace = "com.zapmap.pokemon"
+    compileSdk = 33
 
     defaultConfig {
-        applicationId = Configurations.applicationId
-        minSdk = Configurations.minSdk
-        targetSdk = Configurations.targetSdk
-        versionCode = Configurations.versionCode
-        versionName = Configurations.versionName
+        applicationId = "com.zapmap.pokemon"
+        minSdk = 22
+        targetSdk = 33
+        versionCode = 1
+        versionName = "1.0"
+
+        buildConfigField("String", "SERVER_API", "\"https://pokeapi.co/api/v2/\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -49,11 +47,30 @@ android {
 }
 
 dependencies {
-    implementations(Dependencies.appDependencies)
-    kapts(Dependencies.appKaptDependencies)
-
-    testImplementations(Dependencies.testDependencies)
-    androidTestImplementations(Dependencies.androidTestDependencies)
+    implementation ("androidx.core:core-ktx:1.7.0")
+    implementation ("androidx.appcompat:appcompat:1.6.0")
+    implementation ("com.google.android.material:material:1.8.0")
+    implementation ("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation ("com.jakewharton.timber:timber:5.0.1")
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.okhttp3:okhttp:5.0.0-alpha.2")
+    implementation ("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
+    implementation ("com.squareup.retrofit2:converter-moshi:2.9.0")
+    implementation ("com.squareup.moshi:moshi-kotlin:1.14.0")
+    implementation ("androidx.activity:activity-ktx:1.6.0")
+    implementation ("androidx.navigation:navigation-fragment-ktx:2.5.3")
+    implementation ("androidx.navigation:navigation-ui-ktx:2.5.3")
+    implementation ("com.google.dagger:hilt-android:2.42")
+    implementation ("com.github.bumptech.glide:glide:4.15.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.15.0")
+    kapt ("com.google.dagger:hilt-android-compiler:2.42")
+    kapt ("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
+    testImplementation ("junit:junit:4.13.2")
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.2")
+    testImplementation ("org.assertj:assertj-core:3.11.1")
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+    testImplementation ("androidx.test.ext:junit:1.1.5")
+    testImplementation ("androidx.arch.core:core-testing:2.1.0")
 }
 
 kapt {
